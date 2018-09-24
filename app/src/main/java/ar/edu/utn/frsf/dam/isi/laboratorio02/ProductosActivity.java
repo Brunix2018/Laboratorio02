@@ -1,5 +1,6 @@
 package ar.edu.utn.frsf.dam.isi.laboratorio02;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -28,6 +29,7 @@ public class ProductosActivity extends AppCompatActivity {
     private Button btnPrrAddPedido;
     private ArrayAdapter<Categoria> adapterCategoria;
     private ArrayAdapter<Producto> adapterProductos;
+    private Producto seleccionProducto;
 
 
     @Override
@@ -38,12 +40,12 @@ public class ProductosActivity extends AppCompatActivity {
         listaPedidos = new PedidoRepository();
         cmbProductosCategoria = (Spinner) findViewById(R.id.cmbProductosCategoria);
         lstProductos = (ListView) findViewById(R.id.lstProducos);
+        lstProductos.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         edtProdCantidad = (EditText) findViewById(R.id.edtProdCantidad);
 
         btnPrrAddPedido = (Button) findViewById(R.id.btnProdAddPedido);
 
-        edtProdCantidad.setEnabled(false);
-        btnPrrAddPedido.setEnabled(false);
+
 
 
         adapterCategoria = new ArrayAdapter<>(this,
@@ -52,14 +54,22 @@ public class ProductosActivity extends AppCompatActivity {
         cmbProductosCategoria.setAdapter(adapterCategoria);
 
         adapterProductos = new ArrayAdapter(this,
-                android.R.layout.simple_list_item_1, listaProductos.buscarPorCategoria(adapterCategoria.getItem(0)));
+                android.R.layout.simple_list_item_single_choice, listaProductos.buscarPorCategoria(adapterCategoria.getItem(0)));
         lstProductos.setAdapter(adapterProductos);
 
         String esPedido = getIntent().getStringExtra("NUEVO_PEDIDO");
 
 
+        if (esPedido.equals("1")){
+            edtProdCantidad.setEnabled(true);
+            btnPrrAddPedido.setEnabled(true);
+        }else{
+            edtProdCantidad.setEnabled(false);
+            btnPrrAddPedido.setEnabled(false);
+        }
 
-        edtProdCantidad.setText(esPedido.toString());
+
+
 
 
         //Oyentes
@@ -79,6 +89,27 @@ public class ProductosActivity extends AppCompatActivity {
             }
         });
 
+        btnPrrAddPedido.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intentResultado = new Intent();
+                intentResultado.putExtra("cantidad", edtProdCantidad.getText());
+                intentResultado.putExtra("idProducto",seleccionProducto.getId());
+
+                setResult(Activity.RESULT_OK,intentResultado);
+                finish();
+            }
+        });
+
+        lstProductos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                    seleccionProducto = (Producto) adapterView.getItemAtPosition(position);
+
+                }
+            }
+        );
 
     }
 
