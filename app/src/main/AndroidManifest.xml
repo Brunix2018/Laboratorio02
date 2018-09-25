@@ -16,7 +16,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ProductosActivity"></activity>
+        <activity android:name=".ProductosActivity" />
+        <activity android:name=".AltaPedidosActivity" />
+        <activity android:name=".HistorialPedidooActiity"></activity>
     </application>
 
 </manifest>
