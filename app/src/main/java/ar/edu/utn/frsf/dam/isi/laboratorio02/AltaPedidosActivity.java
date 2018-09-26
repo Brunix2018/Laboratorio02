@@ -157,7 +157,7 @@ public class AltaPedidosActivity extends AppCompatActivity {
                     }else{
                         unPedido.setMailContacto(edtPedidoCorreo.getText().toString());
                         unPedido.setDireccionEnvio(edtPedidoDireccion.getText().toString());
-
+                        unPedido.setEstado(Pedido.Estado.REALIZADO);
 
                         repositorioPedido.guardarPedido(unPedido);
                         unPedido=new Pedido();
