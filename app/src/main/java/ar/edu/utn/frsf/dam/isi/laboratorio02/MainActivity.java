@@ -14,7 +14,7 @@ public class MainActivity extends AppCompatActivity {
     private Button btnHistorial;
     private Button btnListaProductos;
     private String esPedido;
-    static final int codigoNuevoPedido = 1;
+
 
 
     @Override
@@ -29,10 +29,13 @@ public class MainActivity extends AppCompatActivity {
         btnNuevoPedido.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                esPedido="1";
-                Intent i = new Intent(MainActivity.this, ProductosActivity.class);
-                i.putExtra("NUEVO_PEDIDO",esPedido);
-                startActivityForResult(i,codigoNuevoPedido);
+                Intent i = new Intent(MainActivity.this, AltaPedidosActivity.class);
+                startActivity(i);
+
+                //esPedido="1";
+                //Intent i = new Intent(MainActivity.this, ProductosActivity.class);
+                //i.putExtra("NUEVO_PEDIDO",esPedido);
+                //startActivityForResult(i,codigoNuevoPedido);
 
 
             }
@@ -61,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @Override
+   /* @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if( resultCode== Activity.RESULT_OK){
             if(requestCode==codigoNuevoPedido){
@@ -70,5 +73,5 @@ public class MainActivity extends AppCompatActivity {
 
             }
         }
-    }
+    }*/
 }
