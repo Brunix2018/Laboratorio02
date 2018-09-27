@@ -28,7 +28,7 @@ public class HistorialPedidooActiity extends AppCompatActivity {
         btnHistorialNuevo = findViewById(R.id.btnHistorialNuevo);
         btnHistorialMmenu = findViewById(R.id.btnHistorialMenu);
         unRepoPedido = new PedidoRepository();
-        unAdapter= new PedidoAdapter(this,unRepoPedido.getLista());
+        unAdapter= new PedidoAdapter(HistorialPedidooActiity.this,unRepoPedido.getLista());
 
 
 

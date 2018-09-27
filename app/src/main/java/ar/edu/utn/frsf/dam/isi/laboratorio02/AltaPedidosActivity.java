@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,6 +17,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -50,7 +52,7 @@ public class AltaPedidosActivity extends AppCompatActivity {
     Pedido unPedido;
     PedidoRepository repositorioPedido;
     ProductoRepository repositorioProducto;
-
+    PedidoDetalle unPedidoDetalle;
 
 
 
@@ -79,7 +81,37 @@ public class AltaPedidosActivity extends AppCompatActivity {
         btnPedidoHacerPedido = findViewById(R.id.btnPedidoHacerPedido);
         btnPedidoVolver = findViewById(R.id.btnPedidoVolver);
 
-        unPedido = new Pedido();
+        /**************************************************
+        Agarramos un pedido que viene por parametros*/
+
+        Intent i1= getIntent();
+        int idPedido = 0;
+        if(i1.getExtras()!=null){
+            idPedido = i1.getExtras().getInt("idPedidoSeleccionado");
+        }
+        if(idPedido>0){
+            unPedido = repositorioPedido.buscarPorId(idPedido);
+            edtPedidoCorreo.setText(unPedido.getMailContacto());
+            edtPedidoDireccion.setText(unPedido.getDireccionEnvio());
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+            edtPedidoHoraEntrega.setText(sdf.format(unPedido.getFecha()));
+            optPedidoEnviar.setChecked(!unPedido.getRetirar());
+            optPedidoRetira.setChecked(unPedido.getRetirar());
+        }else {
+            unPedido = new Pedido();
+        }
+
+
+
+
+
+
+        /**************************************************
+         Agarramos un pedido que viene por parametros*/
+
+        //unPedido = new Pedido();
+
+
         repositorioPedido = new PedidoRepository();
         repositorioProducto = new ProductoRepository();
 
@@ -172,8 +204,35 @@ public class AltaPedidosActivity extends AppCompatActivity {
             }
         });
 
+        btnPedidoVolver.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent i = new Intent(AltaPedidosActivity.this, MainActivity.class);
+                startActivity(i);
 
 
+            }
+        });
+
+        btnPedidoQuitarProducto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                unPedido.quitarDetalle(unPedidoDetalle);
+                adapterPedidos.notifyDataSetChanged();
+
+
+            }
+        });
+
+        lstPedidoItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                                @Override
+                                                public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                                                    unPedidoDetalle = (PedidoDetalle) adapterView.getItemAtPosition(position);
+                                                    lstPedidoItems.setSelection(position);
+                                                }
+                                            }
+        );
 
 
 

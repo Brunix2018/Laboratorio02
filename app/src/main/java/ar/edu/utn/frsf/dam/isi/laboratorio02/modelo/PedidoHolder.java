@@ -19,7 +19,7 @@ public class PedidoHolder {
     public TextView estado;
     public ImageView tipoEntrega;
     public Button btnCancelar;
-    public Button btnVerDetalle;
+    public Button btnDetalle;
 
 
     public PedidoHolder(View base) {
@@ -29,8 +29,7 @@ public class PedidoHolder {
     this.tvPrecio = (TextView) base.findViewById(R.id.tvPrecio);
     this.estado = (TextView) base.findViewById(R.id.estado);
     this.btnCancelar = (Button) base.findViewById(R.id.btnCancelar);
-
-
+    this.btnDetalle = (Button) base.findViewById(R.id.btnDetalle);
 
     }
 }

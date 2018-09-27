@@ -1,6 +1,7 @@
 package ar.edu.utn.frsf.dam.isi.laboratorio02.modelo;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,6 +12,8 @@ import android.widget.ArrayAdapter;
 
 import java.util.List;
 
+import ar.edu.utn.frsf.dam.isi.laboratorio02.AltaPedidosActivity;
+import ar.edu.utn.frsf.dam.isi.laboratorio02.HistorialPedidooActiity;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.R;
 
 public class PedidoAdapter extends ArrayAdapter<Pedido> {
@@ -96,6 +99,22 @@ public class PedidoAdapter extends ArrayAdapter<Pedido> {
                     return;
             }
         }});
+
+        holder.btnDetalle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int indice = (int) view.getTag();
+                Pedido pedidoSeleccionado = datos.get(indice);
+
+                Intent i = new Intent(ctx, AltaPedidosActivity.class);
+
+                i.putExtra("idPedidoSeleccionado",pedidoSeleccionado.getId());
+                ctx.startActivity(i);
+
+            }
+        });
+
+
 
         return fila;
     }
