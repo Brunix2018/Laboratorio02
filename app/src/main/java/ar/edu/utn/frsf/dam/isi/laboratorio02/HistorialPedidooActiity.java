@@ -8,8 +8,15 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.PedidoRepository;
+import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.Categoria;
+import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.Pedido;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.PedidoAdapter;
+import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.PedidoDetalle;
+import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.Producto;
 
 public class HistorialPedidooActiity extends AppCompatActivity {
 
@@ -19,16 +26,22 @@ public class HistorialPedidooActiity extends AppCompatActivity {
     PedidoAdapter unAdapter;
     PedidoRepository unRepoPedido;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_historial_pedidoo_actiity);
+
+
+
 
         lstHistoalPedidos = findViewById(R.id.lstHiorialPedidos);
         btnHistorialNuevo = findViewById(R.id.btnHistorialNuevo);
         btnHistorialMmenu = findViewById(R.id.btnHistorialMenu);
         unRepoPedido = new PedidoRepository();
         unAdapter= new PedidoAdapter(HistorialPedidooActiity.this,unRepoPedido.getLista());
+
+        lstHistoalPedidos.setAdapter(unAdapter);
 
 
 

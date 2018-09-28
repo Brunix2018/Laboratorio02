@@ -73,6 +73,7 @@ public class AltaPedidosActivity extends AppCompatActivity {
         edtPedidoDireccion = findViewById(R.id.edtPedidoDireccion);
         edtPedidoHoraEntrega = findViewById(R.id.edtPedidoHoraEntrega);
         lstPedidoItems = findViewById(R.id.lstPedidoItems);
+        lstPedidoItems.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         btnPedidoAddProducto = findViewById(R.id.btnPedidoAddProducto);
         btnPedidoQuitarProducto = findViewById(R.id.btnPedidoQuitarProducto);
         lblTotalPedido = findViewById(R.id.lblTotalPedido);
@@ -191,7 +192,13 @@ public class AltaPedidosActivity extends AppCompatActivity {
                         unPedido.setDireccionEnvio(edtPedidoDireccion.getText().toString());
                         unPedido.setEstado(Pedido.Estado.REALIZADO);
 
+                        if (optPedidoEnviar.isChecked()){
+                            unPedido.setRetirar(false);
+                        }else unPedido.setRetirar(true);
+
+
                         repositorioPedido.guardarPedido(unPedido);
+                    Log.d("AltaPedidoActivity","Pedido "+unPedido.toString());
                         unPedido=new Pedido();
                         Log.d("APP_LAB02","Pedido "+unPedido.toString());
 

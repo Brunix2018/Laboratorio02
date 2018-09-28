@@ -57,21 +57,12 @@ public class MainActivity extends AppCompatActivity {
         btnHistorial.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent();
+                Intent i = new Intent(MainActivity.this, HistorialPedidooActiity.class);
                 startActivity(i);
             }
         });
 
     }
 
-   /* @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if( resultCode== Activity.RESULT_OK){
-            if(requestCode==codigoNuevoPedido){
-                String cantidad = data.getExtras().getString("cantidad");
-                Integer idProducto = data.getExtras().getInt("idProducto");
 
-            }
-        }
-    }*/
 }

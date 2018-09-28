@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,51 +19,70 @@ import ar.edu.utn.frsf.dam.isi.laboratorio02.R;
 
 public class PedidoAdapter extends ArrayAdapter<Pedido> {
     private Context ctx;
-    private List<Pedido> datos;
+    private List<Pedido> listaPedidos;
 
 
     public PedidoAdapter(Context context,List<Pedido> objects) {
         super(context, 0, objects);
         this.ctx = context;
-        this.datos = objects;
+        this.listaPedidos = objects;
     }
 
     @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+    public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
-        LayoutInflater inflater = LayoutInflater.from(this.getContext());
+
 
         View fila = convertView;
+        PedidoHolder holder;
 
         if(fila== null) {
+            LayoutInflater inflater = LayoutInflater.from(this.getContext());
             fila = inflater.inflate(R.layout.fila_historial, parent, false);
-        }
-        PedidoHolder holder = (PedidoHolder) fila.getTag();
-        if(holder==null){
             holder = new PedidoHolder(fila);
             fila.setTag(holder);
+        }else{
+            holder = (PedidoHolder) fila.getTag();
         }
 
+
         Pedido unPedido = (Pedido) super.getItem(position);
+        Log.d("PedidoAdapter","Pedido "+unPedido.toString());
 
 
-        if(unPedido.getRetirar()){
+        if(unPedido.getRetirar()==true){
             holder.tipoEntrega.setImageResource(R.drawable.tenedor);
         }else{
             holder.tipoEntrega.setImageResource(R.drawable.camion);
         }
 
         String email= "Contacto: "+unPedido.getMailContacto();
-        String fecha= "Fecha de entrega: "+unPedido.getFecha().toString();
-        String items= "Items: "+unPedido.getDetalle().size();
-        String pago= "A pagar: "+this.getCostoTotal(unPedido);
+        String fecha= unPedido.getFecha().toString();
+        String items= "Items: "+String.valueOf(unPedido.getDetalle().size());
+        String pago= "A pagar: $"+this.getCostoTotal(unPedido);
+
 
         holder.tvMailPedido.setText(email);
         holder.tvHoraEntrega.setText(fecha);
         holder.tvCantidadItems.setText(items);
         holder.tvPrecio.setText(pago);
         holder.estado.setText(unPedido.getEstado().toString());
+
+
+
+
+
+
+/*
+        holder.tvMailPedido.setText(unPedido.getMailContacto());
+        holder.tvHoraEntrega.setText((CharSequence) unPedido.getFecha().toString());
+        holder.tvCantidadItems.setText(String.valueOf(unPedido.getDetalle().size()));
+        holder.tvPrecio.setText(this.getCostoTotal(unPedido));
+        holder.estado.setText(unPedido.getEstado().toString());
+*/
+
+
 
         switch (unPedido.getEstado()){
             case LISTO:
@@ -89,8 +109,12 @@ public class PedidoAdapter extends ArrayAdapter<Pedido> {
         holder.btnCancelar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int indice = (int) view.getTag();
-                Pedido pedidoSeleccionado = datos.get(indice);
+
+                //int indice = (int) view.getTag();
+                int indice= position;
+
+
+                Pedido pedidoSeleccionado = listaPedidos.get(indice);
                 if( pedidoSeleccionado.getEstado().equals(Pedido.Estado.REALIZADO)||
                         pedidoSeleccionado.getEstado().equals(Pedido.Estado.ACEPTADO)||
                         pedidoSeleccionado.getEstado().equals(Pedido.Estado.EN_PREPARACION)){
@@ -103,8 +127,9 @@ public class PedidoAdapter extends ArrayAdapter<Pedido> {
         holder.btnDetalle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int indice = (int) view.getTag();
-                Pedido pedidoSeleccionado = datos.get(indice);
+                //int indice = (int) view.getTag();
+                int indice= position;
+                Pedido pedidoSeleccionado = listaPedidos.get(indice);
 
                 Intent i = new Intent(ctx, AltaPedidosActivity.class);
 

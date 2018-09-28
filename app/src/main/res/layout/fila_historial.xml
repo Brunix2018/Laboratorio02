@@ -18,8 +18,8 @@
 
         <ImageView
             android:id="@+id/tipoEntrega"
-            android:layout_width="33dp"
-            android:layout_height="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             app:srcCompat="@mipmap/ic_launcher" />
 
@@ -65,14 +65,14 @@
 
         <TextView
             android:id="@+id/lblEstado"
-            android:layout_width="15dp"
+            android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Estado:" />
+            android:text="  Estado:  " />
 
         <TextView
             android:id="@+id/estado"
-            android:layout_width="60dp"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
 

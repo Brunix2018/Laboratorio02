@@ -30,6 +30,7 @@ public class PedidoHolder {
     this.estado = (TextView) base.findViewById(R.id.estado);
     this.btnCancelar = (Button) base.findViewById(R.id.btnCancelar);
     this.btnDetalle = (Button) base.findViewById(R.id.btnDetalle);
+    this.tipoEntrega= (ImageView) base.findViewById(R.id.tipoEntrega);
 
     }
 }
