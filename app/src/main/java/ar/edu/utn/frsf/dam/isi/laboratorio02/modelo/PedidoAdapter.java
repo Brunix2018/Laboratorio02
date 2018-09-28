@@ -60,7 +60,7 @@ public class PedidoAdapter extends ArrayAdapter<Pedido> {
         String email= "Contacto: "+unPedido.getMailContacto();
         String fecha= unPedido.getFecha().toString();
         String items= "Items: "+String.valueOf(unPedido.getDetalle().size());
-        String pago= "A pagar: $"+this.getCostoTotal(unPedido);
+        String pago= "A pagar: $"+String.valueOf(unPedido.total());
 
 
         holder.tvMailPedido.setText(email);
@@ -145,23 +145,5 @@ public class PedidoAdapter extends ArrayAdapter<Pedido> {
     }
 
 
-    private String getCostoTotal ( Pedido unPedido){
-        double costoTotal=0.0;
 
-        for (int i = 0; i < unPedido.getDetalle().size(); i++){
-
-            PedidoDetalle pedDet = unPedido.getDetalle().get(i);
-            double precio = pedDet.getProducto().getPrecio();
-            int cantidad= pedDet.getCantidad();
-            costoTotal= precio*cantidad+costoTotal;
-
-        }
-
-        return String.valueOf(costoTotal);
-
-
-
-
-
-    }
 }

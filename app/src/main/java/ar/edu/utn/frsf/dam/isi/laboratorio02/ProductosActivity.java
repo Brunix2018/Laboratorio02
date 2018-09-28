@@ -22,7 +22,7 @@ public class ProductosActivity extends AppCompatActivity {
 
 
     private ProductoRepository listaProductos;
-    private PedidoRepository listaPedidos;
+   // private PedidoRepository listaPedidos;
 
     private Spinner cmbProductosCategoria;
     private ListView lstProductos;
@@ -38,7 +38,7 @@ public class ProductosActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_productos);
         listaProductos = new ProductoRepository();
-        listaPedidos = new PedidoRepository();
+       // listaPedidos = new PedidoRepository();
         cmbProductosCategoria = (Spinner) findViewById(R.id.cmbProductosCategoria);
         lstProductos = (ListView) findViewById(R.id.lstProducos);
         lstProductos.setChoiceMode(ListView.CHOICE_MODE_SINGLE);

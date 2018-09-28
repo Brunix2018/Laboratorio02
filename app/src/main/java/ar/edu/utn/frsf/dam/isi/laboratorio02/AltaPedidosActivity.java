@@ -31,7 +31,6 @@ import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.Producto;
 public class AltaPedidosActivity extends AppCompatActivity {
 
 
-
     private EditText edtPedidoCorreo;
     private RadioGroup optedidoModoEntrega;
     private RadioButton optPedidoRetira;
@@ -53,11 +52,7 @@ public class AltaPedidosActivity extends AppCompatActivity {
     PedidoRepository repositorioPedido;
     ProductoRepository repositorioProducto;
     PedidoDetalle unPedidoDetalle;
-
-
-
-
-
+    int detalleSelect;
 
 
 
@@ -103,10 +98,6 @@ public class AltaPedidosActivity extends AppCompatActivity {
         }
 
 
-
-
-
-
         /**************************************************
          Agarramos un pedido que viene por parametros*/
 
@@ -117,15 +108,9 @@ public class AltaPedidosActivity extends AppCompatActivity {
         repositorioProducto = new ProductoRepository();
 
 
-
         adapterPedidos = new ArrayAdapter<PedidoDetalle>(this,
                 android.R.layout.simple_list_item_single_choice, unPedido.getDetalle());
         lstPedidoItems.setAdapter(adapterPedidos);
-
-
-
-
-
 
 
         //oyentes
@@ -227,6 +212,7 @@ public class AltaPedidosActivity extends AppCompatActivity {
             public void onClick(View view) {
                 unPedido.quitarDetalle(unPedidoDetalle);
                 adapterPedidos.notifyDataSetChanged();
+                lblTotalPedido.setText("Total del Pedido: $"+String.valueOf(unPedido.total()));
 
 
             }
@@ -235,8 +221,9 @@ public class AltaPedidosActivity extends AppCompatActivity {
         lstPedidoItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                                 @Override
                                                 public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                                                    unPedidoDetalle = (PedidoDetalle) adapterView.getItemAtPosition(position);
-                                                    lstPedidoItems.setSelection(position);
+                unPedidoDetalle = (PedidoDetalle) adapterView.getItemAtPosition(position);
+                detalleSelect= position;
+                lstPedidoItems.setSelection(position);
                                                 }
                                             }
         );
@@ -244,8 +231,6 @@ public class AltaPedidosActivity extends AppCompatActivity {
 
 
     }
-
-
 
 
 
@@ -261,24 +246,16 @@ public class AltaPedidosActivity extends AppCompatActivity {
                 Log.d("cantProducto=","cantProducto="+cantProducto);
 
                Producto unProducto = repositorioProducto.buscarPorId(idProducto);
-               PedidoDetalle unPedidoDetalle = new PedidoDetalle(cantProducto,unProducto);
+               PedidoDetalle pedDta = new PedidoDetalle(cantProducto,unProducto);
 
 
-               unPedidoDetalle.setPedido(unPedido);
+                pedDta.setPedido(unPedido);
 
                 Log.d("Cantidad pedidos=","cant="+unPedido.getDetalle().size());
 
                adapterPedidos.notifyDataSetChanged();
 
-               double costoTotal=0.0;
-
-               for (int i = 0; i < unPedido.getDetalle().size(); i++){
-                   PedidoDetalle pedDet = unPedido.getDetalle().get(i);
-                   costoTotal= pedDet.getProducto().getPrecio()*cantProducto+costoTotal;
-                   Log.d("costoTotal=","costoTotal="+costoTotal);
-                }
-
-                lblTotalPedido.setText("Total del Pedido: $"+String.valueOf(costoTotal));
+                lblTotalPedido.setText("Total del Pedido: $"+String.valueOf(unPedido.total()));
 
             }
         }
