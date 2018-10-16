@@ -13,4 +13,6 @@
     <string name="lbl_total_del_pedido">Total del Pedido: $0.0</string>
     <string name="btn_hacer_pedido">Hacer Pedido</string>
     <string name="btn_volver">Volver</string>
+    <string name="canal_estado_nombre">canal_estado_nombre</string>
+    <string name="canal_estado_descr">canal_estado_descr</string>
 </resources>
