@@ -1,12 +1,19 @@
 package ar.edu.utn.frsf.dam.isi.laboratorio02.modelo;
 
-import android.app.Notification;
+
+
+
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.widget.Toast;
+
+import ar.edu.utn.frsf.dam.isi.laboratorio02.AltaPedidosActivity;
+import ar.edu.utn.frsf.dam.isi.laboratorio02.HistorialPedidooActiity;
 
 import ar.edu.utn.frsf.dam.isi.laboratorio02.R;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.PedidoRepository;
@@ -17,7 +24,7 @@ public class EstadoPedidoReceiver extends BroadcastReceiver {
     public static final String EVENTO_CANCELADO="ar.edu.utn.dam.isi.laboratorio02.ESTADO_CANCELADO";
     public static final String EVENTO_PREPARACION="ar.edu.utn.dam.isi.laboratorio02.ESTADO_EN_PREPARACION";
     public static final String EVENTO_LISTO="ar.edu.utn.dam.isi.laboratorio02.ESTADO_LISTO";
-
+    NotificationCompat.Builder notificarEstadoPedido;
 
 
     @Override
@@ -32,12 +39,25 @@ public class EstadoPedidoReceiver extends BroadcastReceiver {
 
         String detalle = "El costo total será de $"+p.total()+"\n"+"Previsto en envio para "+p.getFecha();
 
-        Notification notification = new NotificationCompat.Builder(context, "CANAL01")
+        // Create an explicit intent for an Activity in your app
+        Intent destino = new Intent(context, AltaPedidosActivity.class);
+        destino.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, destino, 0);
+
+        notificarEstadoPedido = new NotificationCompat.Builder(context, "CANAL01")
                 .setSmallIcon(R.drawable.resto)
                 .setContentTitle("Tu Pedido fue aceptado")
-                .setContentText(detalle)
-                .build();
-       // NotificationManager notificationManager = (NotificationManager) context.getSystemService("CANAL01");
-       // notificationManager.notify(07,notification);
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText(detalle))
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                // Set the intent that will fire when the user taps the notification
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true);
+
+        NotificationManagerCompat notificationManager =
+                NotificationManagerCompat.from(context);
+        notificationManager.notify(7, notificarEstadoPedido.build());
+
+
     }
 }
