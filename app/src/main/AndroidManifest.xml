@@ -18,7 +18,19 @@
         </activity>
         <activity android:name=".ProductosActivity" />
         <activity android:name=".AltaPedidosActivity" />
-        <activity android:name=".HistorialPedidooActiity"></activity>
+        <activity android:name=".HistorialPedidooActiity" />
+
+        <receiver
+            android:name=".modelo.EstadoPedidoReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="ar.edu.utn.dam.isi.laboratorio02.ESTADO_ACEPTADO"/>
+                <action android:name="ar.edu.utn.dam.isi.laboratorio02.ESTADO_CANCELADO"/>
+                <action android:name="ar.edu.utn.dam.isi.laboratorio02.ESTADO_EN_PREPARACION"/>
+                <action android:name="ar.edu.utn.dam.isi.laboratorio02.ESTADO_LISTO"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
