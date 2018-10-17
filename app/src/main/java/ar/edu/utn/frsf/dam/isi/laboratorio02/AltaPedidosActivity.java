@@ -1,6 +1,7 @@
 package ar.edu.utn.frsf.dam.isi.laboratorio02;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -24,6 +25,7 @@ import java.util.List;
 
 import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.PedidoRepository;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.ProductoRepository;
+import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.EstadoPedidoReceiver;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.Pedido;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.PedidoDetalle;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.Producto;
@@ -137,6 +139,15 @@ public class AltaPedidosActivity extends AppCompatActivity {
             }
         });
 
+
+        /*
+        inicializacion de la clase broadcast receiver
+        */
+        final BroadcastReceiver estadoReceiver = new EstadoPedidoReceiver();
+
+
+
+
         btnPedidoHacerPedido.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -184,8 +195,43 @@ public class AltaPedidosActivity extends AppCompatActivity {
 
                         repositorioPedido.guardarPedido(unPedido);
                     Log.d("AltaPedidoActivity","Pedido "+unPedido.toString());
-                        unPedido=new Pedido();
+                       // unPedido=new Pedido();
                         Log.d("APP_LAB02","Pedido "+unPedido.toString());
+
+
+                    Runnable r = new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                Thread.currentThread().sleep(10000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+
+                            Intent br = new Intent();
+                            br.putExtra("idPedido", unPedido.getId());
+                            br.setAction(((EstadoPedidoReceiver) estadoReceiver).EVENTO_ACEPTADO);
+                            sendBroadcast(br);
+
+                        // buscar pedidos no aceptados y aceptarlos automáticamente
+                            List<Pedido> lista = repositorioPedido.getLista();
+                            for(Pedido p:lista){
+                                if(p.getEstado().equals(Pedido.Estado.REALIZADO))
+                                    p.setEstado(Pedido.Estado.ACEPTADO);
+                            }
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(AltaPedidosActivity.this,"Informacion de pedidos actualizada!",Toast.LENGTH_LONG).show();
+                                }
+                            });
+                        }
+                    };
+                    Thread unHilo = new Thread(r);
+                    unHilo.start();
+
+
+
 
                         Intent i = new Intent(AltaPedidosActivity.this, HistorialPedidooActiity.class);
                         startActivity(i);
