@@ -11,6 +11,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.PrepararPedidoService;
+
 public class MainActivity extends AppCompatActivity {
 
     private Button btnNuevoPedido;
@@ -72,6 +74,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // lanzar un servicio Intent service
+                Intent intent = new Intent(MainActivity.this,PrepararPedidoService.class);
+                startService(intent);
             }
         });
 
