@@ -51,8 +51,9 @@ public class AltaPedidosActivity extends AppCompatActivity {
     private ArrayAdapter<PedidoDetalle> adapterPedidos;
 
     Pedido unPedido;
-    PedidoRepository repositorioPedido;
-    ProductoRepository repositorioProducto;
+    boolean pedidoParametro=false;
+    PedidoRepository repositorioPedido = new PedidoRepository();
+    ProductoRepository repositorioProducto = new ProductoRepository();;
     PedidoDetalle unPedidoDetalle;
     int detalleSelect;
 
@@ -86,8 +87,10 @@ public class AltaPedidosActivity extends AppCompatActivity {
         int idPedido = 0;
         if(i1.getExtras()!=null){
             idPedido = i1.getExtras().getInt("idPedidoSeleccionado");
-        }
-        if(idPedido>0){
+            pedidoParametro=true;
+
+       // }
+        //if(idPedido>0){
             unPedido = repositorioPedido.buscarPorId(idPedido);
             edtPedidoCorreo.setText(unPedido.getMailContacto());
             edtPedidoDireccion.setText(unPedido.getDireccionEnvio());
@@ -105,9 +108,6 @@ public class AltaPedidosActivity extends AppCompatActivity {
 
         //unPedido = new Pedido();
 
-
-        repositorioPedido = new PedidoRepository();
-        repositorioProducto = new ProductoRepository();
 
 
         adapterPedidos = new ArrayAdapter<PedidoDetalle>(this,
@@ -192,8 +192,8 @@ public class AltaPedidosActivity extends AppCompatActivity {
                             unPedido.setRetirar(false);
                         }else unPedido.setRetirar(true);
 
+                        if (pedidoParametro == false) repositorioPedido.guardarPedido(unPedido);
 
-                        repositorioPedido.guardarPedido(unPedido);
                     Log.d("AltaPedidoActivity","Pedido "+unPedido.toString());
                        // unPedido=new Pedido();
                         Log.d("APP_LAB02","Pedido "+unPedido.toString());
@@ -208,16 +208,20 @@ public class AltaPedidosActivity extends AppCompatActivity {
                                 e.printStackTrace();
                             }
 
-                            Intent br = new Intent();
+                           /* Intent br = new Intent();
                             br.putExtra("idPedido", unPedido.getId());
                             br.setAction(((EstadoPedidoReceiver) estadoReceiver).EVENTO_ACEPTADO);
-                            sendBroadcast(br);
+                            sendBroadcast(br);*/
 
                         // buscar pedidos no aceptados y aceptarlos automáticamente
                             List<Pedido> lista = repositorioPedido.getLista();
                             for(Pedido p:lista){
                                 if(p.getEstado().equals(Pedido.Estado.REALIZADO))
                                     p.setEstado(Pedido.Estado.ACEPTADO);
+                                Intent br = new Intent();
+                                br.putExtra("idPedido", unPedido.getId());
+                                br.setAction(EstadoPedidoReceiver.EVENTO_ACEPTADO);
+                                sendBroadcast(br);
                             }
                             runOnUiThread(new Runnable() {
                                 @Override
