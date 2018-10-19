@@ -218,7 +218,7 @@ public class AltaPedidosActivity extends AppCompatActivity {
                             for(Pedido p:lista){
                                 if(p.getEstado().equals(Pedido.Estado.REALIZADO))
                                     p.setEstado(Pedido.Estado.ACEPTADO);
-                                Intent br = new Intent();
+                                Intent br = new Intent(AltaPedidosActivity.this,EstadoPedidoReceiver.class);
                                 br.putExtra("idPedido", unPedido.getId());
                                 br.setAction(EstadoPedidoReceiver.EVENTO_ACEPTADO);
                                 sendBroadcast(br);
