@@ -45,8 +45,9 @@ public class EstadoPedidoReceiver extends BroadcastReceiver {
 
             // Create an explicit intent for an Activity in your app
             Intent destino = new Intent(context, AltaPedidosActivity.class);
+            destino.putExtra("idPedidoSeleccionado",p.getId());
             destino.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, destino, 0);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, destino, PendingIntent.FLAG_UPDATE_CURRENT);
 
             notificarEstadoPedido = new NotificationCompat.Builder(context, "CANAL01")
                     .setSmallIcon(R.drawable.resto)

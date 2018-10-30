@@ -37,7 +37,7 @@ public class PrepararPedidoService extends IntentService {
                 for(Pedido p:lista){
                     if(p.getEstado().equals(Pedido.Estado.ACEPTADO))
                         p.setEstado(Pedido.Estado.EN_PREPARACION);
-                    Intent br = new Intent();
+                    Intent br = new Intent(PrepararPedidoService.this,EstadoPedidoReceiver.class);
                     br.putExtra("idPedido", p.getId());
                     br.setAction(EstadoPedidoReceiver.EVENTO_PREPARACION);
                     sendBroadcast(br);
