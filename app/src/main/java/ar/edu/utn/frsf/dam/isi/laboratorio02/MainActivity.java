@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
     private Button btnListaProductos;
     private Button btnPrepararPedidos;
     private Button btnConfiguracion;
+    private Button btnCategorias;
     private String esPedido;
 
 
@@ -86,6 +87,16 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 // lanzar un servicio Intent service
                 Intent intent = new Intent(MainActivity.this,ConfiguracionActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        btnCategorias = (Button) findViewById(R.id.btn_categ);
+        btnCategorias.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // lanzar un servicio Intent service
+                Intent intent = new Intent(MainActivity.this,CategoriaActivity.class);
                 startActivity(intent);
             }
         });
