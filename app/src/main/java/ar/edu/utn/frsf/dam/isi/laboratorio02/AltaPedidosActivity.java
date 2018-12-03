@@ -3,9 +3,11 @@ package ar.edu.utn.frsf.dam.isi.laboratorio02;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -63,11 +65,13 @@ public class AltaPedidosActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alta_pedidos);
+
+
         edtPedidoCorreo = findViewById(R.id.edtPedidoCorreo);
         optedidoModoEntrega = findViewById(R.id.optPedidoModoEntrega);
         optPedidoRetira = findViewById(R.id.optPedidoRetirar);
         optPedidoEnviar = findViewById(R.id.optPedidoEnviar);
-        optPedidoEnviar.setChecked(true);
+        //optPedidoEnviar.setChecked(true);
         edtPedidoDireccion = findViewById(R.id.edtPedidoDireccion);
         edtPedidoHoraEntrega = findViewById(R.id.edtPedidoHoraEntrega);
         lstPedidoItems = findViewById(R.id.lstPedidoItems);
@@ -79,6 +83,13 @@ public class AltaPedidosActivity extends AppCompatActivity {
 
         btnPedidoHacerPedido = findViewById(R.id.btnPedidoHacerPedido);
         btnPedidoVolver = findViewById(R.id.btnPedidoVolver);
+
+
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        optPedidoRetira.setChecked(prefs.getBoolean("chk_paraRetirar_pref", true));
+        edtPedidoCorreo.setText(prefs.getString("edt_correo_pref","Correo"));
+
 
         /**************************************************
         Agarramos un pedido que viene por parametros*/
