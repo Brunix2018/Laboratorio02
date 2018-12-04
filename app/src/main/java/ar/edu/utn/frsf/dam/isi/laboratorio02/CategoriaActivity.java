@@ -6,11 +6,16 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.Categoria;
+import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.CategoriaRest;
 
 public class CategoriaActivity extends AppCompatActivity {
     private EditText textoCat;
     private Button btnCrear;
     private Button btnMenu;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,7 +25,40 @@ public class CategoriaActivity extends AppCompatActivity {
         btnCrear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-// completer el codigo en el paso “f”
+
+                final CategoriaRest categoriaRest = new CategoriaRest();
+                final Categoria categoria = new Categoria();
+
+                categoria.setNombre(textoCat.getText().toString());
+                Runnable r = new Runnable() {
+                    @Override
+                    public void run() {
+                        Boolean creadoOK = false;
+                        try {
+                            categoriaRest.crearCategoria(categoria);
+                            creadoOK = true;
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            System.out.println("################## ERROR 23 ########################");
+                        }
+
+                        final Boolean finalCreadoOK = creadoOK;
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (finalCreadoOK){
+                                    Toast.makeText(CategoriaActivity.this,"La Categoria fue Creada",Toast.LENGTH_LONG).show();
+                                    textoCat.setText("");
+                                }else{
+                                    Toast.makeText(CategoriaActivity.this,"La Categoria no se pudo crear",Toast.LENGTH_LONG).show();
+                                     }
+
+                            }
+                        });
+                    }
+                };
+                Thread unHilo = new Thread(r);
+                unHilo.start();
             }
         });
         btnMenu= (Button) findViewById(R.id.btnCategoriaVolver);
