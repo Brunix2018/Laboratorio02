@@ -13,9 +13,12 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 
+import java.util.List;
+
 import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.PedidoRepository;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.ProductoRepository;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.Categoria;
+import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.CategoriaRest;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.Producto;
 
 public class ProductosActivity extends AppCompatActivity {
@@ -39,25 +42,85 @@ public class ProductosActivity extends AppCompatActivity {
         setContentView(R.layout.activity_productos);
         listaProductos = new ProductoRepository();
        // listaPedidos = new PedidoRepository();
-        cmbProductosCategoria = (Spinner) findViewById(R.id.cmbProductosCategoria);
-        lstProductos = (ListView) findViewById(R.id.lstProducos);
-        lstProductos.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+      //  cmbProductosCategoria = (Spinner) findViewById(R.id.cmbProductosCategoria);
+      //  lstProductos = (ListView) findViewById(R.id.lstProducos);
+      //  lstProductos.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         edtProdCantidad = (EditText) findViewById(R.id.edtProdCantidad);
 
         btnPrrAddPedido = (Button) findViewById(R.id.btnProdAddPedido);
 
+        //adapterCategoria = new ArrayAdapter<>(this,android.R.layout.simple_spinner_item, listaProductos.getCategorias());
+
+
+/*###############################*/
+        Runnable r = new Runnable() {
+            @Override
+            public void run() {
+                CategoriaRest catRest = new CategoriaRest();
+                Categoria[] cats = new Categoria[0];
+                try {
+                    cats = catRest.listarTodas().toArray(new Categoria[0]);
+                } catch (Exception e) {
+                    System.out.println(" ############  ERROR hilo get categoria en producto activity");
+                    e.printStackTrace();
+                }
+                System.out.println(" ############  CATs ###################");
+                System.out.println(cats);
+
+                final Categoria[] finalCats = cats;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        adapterCategoria = new ArrayAdapter<Categoria>(ProductosActivity.this,android.R.layout.simple_spinner_dropdown_item, finalCats);
+                        cmbProductosCategoria = (Spinner) findViewById(R.id.cmbProductosCategoria);
+                        cmbProductosCategoria.setAdapter(adapterCategoria);
+                        cmbProductosCategoria.setSelection(0);
+                        cmbProductosCategoria.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                                                               @Override
+                                                                               public void onItemSelected(AdapterView<?> parent, View view, int
+                                                                                       position, long id) {
+                                                                                   adapterProductos.clear();
+                                                                                   adapterProductos.addAll(listaProductos.buscarPorCategoria(
+                                                                                           (Categoria)parent.getItemAtPosition(position))
+                                                                                   );
+                                                                                   adapterProductos.notifyDataSetChanged();
+                                                                               }
+                                                                               @Override
+                                                                               public void onNothingSelected(AdapterView<?> parent) {}
+                                                                           });
+                        adapterProductos = new ArrayAdapter(ProductosActivity.this,android.R.layout.simple_list_item_single_choice, listaProductos.buscarPorCategoria(adapterCategoria.getItem(0)));
+                        lstProductos = (ListView) findViewById(R.id.lstProducos);
+                        lstProductos.setAdapter(adapterProductos);
+                        lstProductos.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+                        lstProductos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                                                @Override
+                                                                public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                                                                    seleccionProducto = (Producto) adapterView.getItemAtPosition(position);
+
+                                                                }
+                                                            }
+                        );
+                    }
+                });
+            }
+        };
+        Thread hiloCargarCombo = new Thread(r);
+        hiloCargarCombo.start();
 
 
 
-        adapterCategoria = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, listaProductos.getCategorias());
+
+
+/*###########################################*/
+
+/*
         adapterCategoria.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         cmbProductosCategoria.setAdapter(adapterCategoria);
 
         adapterProductos = new ArrayAdapter(this,
                 android.R.layout.simple_list_item_single_choice, listaProductos.buscarPorCategoria(adapterCategoria.getItem(0)));
         lstProductos.setAdapter(adapterProductos);
-
+*/
         String esPedido = getIntent().getStringExtra("NUEVO_PEDIDO");
 
 
@@ -75,8 +138,9 @@ public class ProductosActivity extends AppCompatActivity {
 
         //Oyentes
 
-
-        cmbProductosCategoria.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+/*
+       cmbProductosCategoria.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 adapterProductos.clear();
@@ -89,7 +153,7 @@ public class ProductosActivity extends AppCompatActivity {
 
             }
         });
-
+*/
         btnPrrAddPedido.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -105,7 +169,7 @@ public class ProductosActivity extends AppCompatActivity {
                 finish();
             }
         });
-
+/*
         lstProductos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
@@ -114,7 +178,7 @@ public class ProductosActivity extends AppCompatActivity {
                 }
             }
         );
-
+*/
     }
 
 }

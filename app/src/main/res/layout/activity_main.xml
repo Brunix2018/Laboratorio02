@@ -37,4 +37,21 @@
         android:layout_height="wrap_content"
         android:text="@string/preparar_pedidos" />
 
+    <Button
+        android:id="@+id/btn_config"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Configuración" />
+
+    <Button
+        android:id="@+id/btn_categ"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Categorías" />
+    <Button
+        android:id="@+id/btn_productos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Gestionar Productos" />
+
 </LinearLayout>
