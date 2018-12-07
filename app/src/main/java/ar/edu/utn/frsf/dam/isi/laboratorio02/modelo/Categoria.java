@@ -10,7 +10,7 @@ import android.arch.persistence.room.TypeConverters;
 @Entity
 public class Categoria {
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     private Integer id;
     @ColumnInfo(name = "nombre")
     private String nombre;
