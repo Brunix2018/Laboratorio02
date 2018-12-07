@@ -16,6 +16,7 @@ import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.PrepararPedidoService;
 public class MainActivity extends AppCompatActivity {
 
     private Button btnNuevoPedido;
+    private Button btnGestionProd;
     private Button btnHistorial;
     private Button btnListaProductos;
     private Button btnPrepararPedidos;
@@ -100,6 +101,17 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        btnGestionProd = (Button) findViewById(R.id.btn_productos);
+        btnGestionProd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // lanzar un servicio Intent service
+                Intent intent = new Intent(MainActivity.this,GestionProductoActivity.class);
+                startActivity(intent);
+            }
+        });
+
 
 
 
