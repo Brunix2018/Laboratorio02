@@ -8,6 +8,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.CategoriaDao;
+import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.RepositorioResto;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.Categoria;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.CategoriaRest;
 
@@ -15,6 +17,7 @@ public class CategoriaActivity extends AppCompatActivity {
     private EditText textoCat;
     private Button btnCrear;
     private Button btnMenu;
+    private CategoriaDao catDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,10 +25,39 @@ public class CategoriaActivity extends AppCompatActivity {
         setContentView(R.layout.activity_categoria);
         textoCat = (EditText) findViewById(R.id.txtNombreCategoria);
         btnCrear = (Button) findViewById(R.id.btnCrearCategoria);
+
+        catDao = RepositorioResto.getInstance(this).getCategoriaDao();
+
         btnCrear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                final Categoria categoria = new Categoria();
+
+                if (textoCat.getText().toString().length()>0) {
+
+                    categoria.setNombre(textoCat.getText().toString());
+
+                    Runnable r = new Runnable() {
+                        @Override
+                        public void run() {
+                            catDao.agregarCat(categoria);
+                        }
+                    };
+                    Thread t = new Thread(r);
+                    t.start();
+                    textoCat.setText("");
+                    Toast.makeText(CategoriaActivity.this,"La Categoria fue Creada",Toast.LENGTH_LONG).show();
+
+                }else{
+                    Toast.makeText(CategoriaActivity.this,"Introduzca un Nombre de Categoria",Toast.LENGTH_LONG).show();
+                }
+
+
+
+
+
+/*
                 final CategoriaRest categoriaRest = new CategoriaRest();
                 final Categoria categoria = new Categoria();
 
@@ -59,6 +91,8 @@ public class CategoriaActivity extends AppCompatActivity {
                 };
                 Thread unHilo = new Thread(r);
                 unHilo.start();
+
+*/
             }
         });
         btnMenu= (Button) findViewById(R.id.btnCategoriaVolver);
