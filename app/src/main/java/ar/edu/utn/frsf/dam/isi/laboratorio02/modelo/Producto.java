@@ -23,6 +23,10 @@ public class Producto {
         this.categoria = categoria;
     }
 
+    public Producto() {
+        }
+
+
     public Producto(Integer id, String nombre, String descripcion, Double precio, Categoria categoria) {
         this.id = id;
         this.nombre = nombre;
