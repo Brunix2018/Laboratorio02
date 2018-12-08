@@ -15,7 +15,12 @@ import android.widget.Spinner;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import java.util.List;
+
+import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.CategoriaDao;
+import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.ProductoDao;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.ProductoRetrofit;
+import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.RepositorioResto;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.RestClient;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.Categoria;
 import ar.edu.utn.frsf.dam.isi.laboratorio02.modelo.CategoriaRest;
@@ -40,6 +45,9 @@ public class GestionProductoActivity extends AppCompatActivity {
     private ArrayAdapter<Categoria> comboAdapter;
     //private ArrayAdapter<Categoria> adapterCategoria;
     private Categoria categoria;
+    private CategoriaDao catDao;
+    private ProductoDao proDao;
+    List<Categoria> listaCat;
 
 
     @Override
@@ -72,7 +80,39 @@ public class GestionProductoActivity extends AppCompatActivity {
            }
        });
 
-        /*###############################*/
+        catDao = RepositorioResto.getInstance(this).getCategoriaDao();
+
+        Runnable r = new Runnable() {
+            @Override
+            public void run() {
+                listaCat = catDao.getAll();
+                comboAdapter = new ArrayAdapter<Categoria>(GestionProductoActivity.this,android.R.layout.simple_spinner_dropdown_item, listaCat);
+                comboCategorias.setAdapter(comboAdapter);
+                runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            comboCategorias.setSelection(0);
+                            categoria = (Categoria) comboCategorias.getSelectedItem();
+                            comboCategorias.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                @Override
+                                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                    categoria = (Categoria) parent.getItemAtPosition(position);
+                                }
+
+                                @Override
+                                public void onNothingSelected(AdapterView<?> parent) {}
+                            });
+                        }
+                    });
+                }
+
+        };
+        Thread t = new Thread(r);
+        t.start();
+
+
+
+        /*
         Runnable r = new Runnable() {
             @Override
             public void run() {
