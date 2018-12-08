@@ -3,17 +3,32 @@ package ar.edu.utn.frsf.dam.isi.laboratorio02.modelo;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.PrimaryKey;
+import android.arch.persistence.room.TypeConverters;
+import android.arch.persistence.room.Ignore;
 
+import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.EstadoConverter;
+import ar.edu.utn.frsf.dam.isi.laboratorio02.dao.FechaConverter;
+
+@Entity
 public class Pedido {
 
     public enum Estado { REALIZADO, ACEPTADO, RECHAZADO,EN_PREPARACION,LISTO,ENTREGADO,CANCELADO}
-
+    @PrimaryKey(autoGenerate = true)
     private Integer id;
+    @TypeConverters(FechaConverter.class)
     private Date fecha;
+    @Ignore
     private List<PedidoDetalle> detalle;
+    @TypeConverters(EstadoConverter.class)
     private Estado estado;
+    @ColumnInfo(name = "direccionEnvio")
     private String direccionEnvio;
+    @ColumnInfo(name = "mailContacto")
     private String mailContacto;
+    @ColumnInfo(name = "Retirar")
     private Boolean retirar;
 
     public String getDireccionEnvio() {

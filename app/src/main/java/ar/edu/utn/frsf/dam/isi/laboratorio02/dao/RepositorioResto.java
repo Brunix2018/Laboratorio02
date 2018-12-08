@@ -20,6 +20,8 @@ public class RepositorioResto {
     private BaseDatosRom db;
     private CategoriaDao categoriaDao;
     private ProductoDao productoDao;
+    private PedidoDao pedidoDao;
+    private PedidoDetallesDao pedidoDetallesDao;
 
 
     // constructor privado para poder implementar SINGLETON
@@ -35,6 +37,8 @@ public class RepositorioResto {
                 .build();
         categoriaDao = db.categoriaDao();
         productoDao = db.productoDao();
+        pedidoDao = db.pedidoDao();
+        pedidoDetallesDao = db.pedidoDetallesDao();
 
 
     }
@@ -57,6 +61,23 @@ public class RepositorioResto {
 
     public void setProductoDao(ProductoDao productoDao) {
         this.productoDao = productoDao;
+    }
+
+
+
+    public PedidoDao getPedidoDao() {
+        return pedidoDao;
+    }
+
+    public void setPedidoDao(PedidoDao pedidoDao) {
+        this.pedidoDao = pedidoDao;
+    }
+
+    public PedidoDetallesDao getPedidoDetallesDao() {
+        return pedidoDetallesDao;
+    }
+
+    public void setPedidoDetallesDao(PedidoDetallesDao pedidoDetallesDao) {this.pedidoDetallesDao = pedidoDetallesDao;
     }
 
 }
