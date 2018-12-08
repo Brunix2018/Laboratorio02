@@ -81,6 +81,7 @@ public class GestionProductoActivity extends AppCompatActivity {
        });
 
         catDao = RepositorioResto.getInstance(this).getCategoriaDao();
+        proDao = RepositorioResto.getInstance(this).getProductoDao();
 
         Runnable r = new Runnable() {
             @Override
@@ -158,7 +159,7 @@ public class GestionProductoActivity extends AppCompatActivity {
 
         /*###########################################*/
 
-
+/*
         btnGuardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -186,7 +187,7 @@ public class GestionProductoActivity extends AppCompatActivity {
                         @Override
                         public void onResponse(Call<Producto> call,
                                                Response<Producto> resp) {
-                    // procesar la respuesta
+
                             switch (resp.code()) {
                                 case 201:
                                     descProducto.setText("");
@@ -209,7 +210,52 @@ public class GestionProductoActivity extends AppCompatActivity {
                 }else{Toast.makeText(GestionProductoActivity.this,incompleto,Toast.LENGTH_LONG).show();}
             }
         });
+*/
+        btnGuardar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+
+                String incompleto="";
+
+                if (descProducto.getText().length()==0) incompleto = "Ingrese Descripción";
+                if (nombreProducto.getText().length()==0) incompleto = "Ingrese Nombre";
+                if (precioProducto.getText().length()==0) incompleto = "Ingrese Precio";
+
+
+                if (incompleto ==""){
+
+                        Runnable r = new Runnable() {
+                            @Override
+                            public void run() {
+                                Producto p = new Producto();
+                                p.setCategoria(categoria);
+                                p.setDescripcion(descProducto.getText().toString());
+                                p.setNombre(nombreProducto.getText().toString());
+                                p.setPrecio(Double.parseDouble(precioProducto.getText().toString()));
+                                proDao.agregarProd(p);
+
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        descProducto.setText("");
+                                        nombreProducto.setText("");
+                                        precioProducto.setText("");
+                                        comboCategorias.setSelection(0);
+                                    }
+                                });
+
+                            }
+                        };
+                        Thread t = new Thread(r);
+                        t.start();
+
+
+
+
+                }else{Toast.makeText(GestionProductoActivity.this,incompleto,Toast.LENGTH_LONG).show();}
+            }
+        });
 
         btnBuscar.setOnClickListener(new View.OnClickListener() {
             @Override
