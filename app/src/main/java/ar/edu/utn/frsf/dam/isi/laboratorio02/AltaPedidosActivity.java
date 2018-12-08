@@ -248,37 +248,37 @@ public class AltaPedidosActivity extends AppCompatActivity {
                                 e.printStackTrace();
                             }
 
-                           /* Intent br = new Intent();
-                            br.putExtra("idPedido", unPedido.getId());
-                            br.setAction(((EstadoPedidoReceiver) estadoReceiver).EVENTO_ACEPTADO);
-                            sendBroadcast(br);*/
 
                         // buscar pedidos no aceptados y aceptarlos automáticamente
-                            List<Pedido> lista = pedDao.getAll();
-                            for(Pedido p:lista){
-                                if(p.getEstado().equals(Pedido.Estado.REALIZADO))
-                                    p.setEstado(Pedido.Estado.ACEPTADO);
-                                Intent br = new Intent(AltaPedidosActivity.this,EstadoPedidoReceiver.class);
-                                br.putExtra("idPedido", unPedido.getId());
-                                br.setAction(EstadoPedidoReceiver.EVENTO_ACEPTADO);
-                                sendBroadcast(br);
-                            }
+                            final List<Pedido> lista = pedDao.getAll();
+
+
+
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
+                                    for(Pedido p:lista) {
+                                        if (p.getEstado().equals(Pedido.Estado.REALIZADO))
+                                            p.setEstado(Pedido.Estado.ACEPTADO);
+                                        Intent br = new Intent(AltaPedidosActivity.this, EstadoPedidoReceiver.class);
+                                        br.putExtra("idPedido", unPedido.getId());
+                                        br.setAction(EstadoPedidoReceiver.EVENTO_ACEPTADO);
+                                        sendBroadcast(br);
+                                    }
                                     Toast.makeText(AltaPedidosActivity.this,"Informacion de pedidos actualizada!",Toast.LENGTH_LONG).show();
+
                                 }
                             });
-                        }
-                    };
+
+                    }};
                     Thread unHilo = new Thread(r);
                     unHilo.start();
 
-
-
-
                         Intent i = new Intent(AltaPedidosActivity.this, HistorialPedidooActiity.class);
                         startActivity(i);
+
+
+
                     }
 
 
