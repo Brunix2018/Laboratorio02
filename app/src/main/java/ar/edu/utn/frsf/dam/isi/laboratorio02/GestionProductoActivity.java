@@ -47,7 +47,8 @@ public class GestionProductoActivity extends AppCompatActivity {
     private Categoria categoria;
     private CategoriaDao catDao;
     private ProductoDao proDao;
-    List<Categoria> listaCat;
+    private List<Categoria> listaCat;
+    private List<Producto> listaProd;
 
 
     @Override
@@ -81,6 +82,7 @@ public class GestionProductoActivity extends AppCompatActivity {
        });
 
         catDao = RepositorioResto.getInstance(this).getCategoriaDao();
+        proDao = RepositorioResto.getInstance(this).getProductoDao();
 
         Runnable r = new Runnable() {
             @Override
@@ -158,7 +160,7 @@ public class GestionProductoActivity extends AppCompatActivity {
 
         /*###########################################*/
 
-
+/*
         btnGuardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -186,7 +188,7 @@ public class GestionProductoActivity extends AppCompatActivity {
                         @Override
                         public void onResponse(Call<Producto> call,
                                                Response<Producto> resp) {
-                    // procesar la respuesta
+
                             switch (resp.code()) {
                                 case 201:
                                     descProducto.setText("");
@@ -209,9 +211,54 @@ public class GestionProductoActivity extends AppCompatActivity {
                 }else{Toast.makeText(GestionProductoActivity.this,incompleto,Toast.LENGTH_LONG).show();}
             }
         });
+*/
+        btnGuardar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
 
-        btnBuscar.setOnClickListener(new View.OnClickListener() {
+                String incompleto="";
+
+                if (descProducto.getText().length()==0) incompleto = "Ingrese Descripción";
+                if (nombreProducto.getText().length()==0) incompleto = "Ingrese Nombre";
+                if (precioProducto.getText().length()==0) incompleto = "Ingrese Precio";
+
+
+                if (incompleto ==""){
+
+                        Runnable r = new Runnable() {
+                            @Override
+                            public void run() {
+                                Producto p = new Producto();
+                                p.setCategoria(categoria);
+                                p.setDescripcion(descProducto.getText().toString());
+                                p.setNombre(nombreProducto.getText().toString());
+                                p.setPrecio(Double.parseDouble(precioProducto.getText().toString()));
+                                proDao.agregarProd(p);
+
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        descProducto.setText("");
+                                        nombreProducto.setText("");
+                                        precioProducto.setText("");
+                                        comboCategorias.setSelection(0);
+                                    }
+                                });
+
+                            }
+                        };
+                        Thread t = new Thread(r);
+                        t.start();
+
+
+
+
+                }else{Toast.makeText(GestionProductoActivity.this,incompleto,Toast.LENGTH_LONG).show();}
+            }
+        });
+
+   /*     btnBuscar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -248,10 +295,48 @@ public class GestionProductoActivity extends AppCompatActivity {
                     }
                 });
             }
+        });*/
+
+        btnBuscar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                if (idProductoBuscar.getText().length()==0) {
+                    Toast.makeText(GestionProductoActivity.this,"Ingrese un ID de Producto",Toast.LENGTH_LONG).show();}
+                else{
+                    Runnable r = new Runnable() {
+                        @Override
+                        public void run() {
+                            Integer id = Integer.parseInt(idProductoBuscar.getText().toString());
+
+                            listaProd = proDao.buscarPorIdProd(id);
+
+                            if (listaProd.isEmpty()) {
+                                Toast.makeText(GestionProductoActivity.this, "Producto no encontrado", Toast.LENGTH_LONG).show();
+                            } else {
+                                final Producto p = listaProd.get(0);
+                                System.out.println(p.getNombre());
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        descProducto.setText(p.getDescripcion());
+                                        nombreProducto.setText(p.getNombre());
+                                        precioProducto.setText(p.getPrecio().toString());
+                                        comboCategorias.setSelection(comboAdapter.getPosition(p.getCategoria()));
+                                    }
+                                });
+                            }
+
+                        }
+                    };
+                    Thread t = new Thread(r);
+                    t.start();
+                 }
+            }
         });
 
-
-        btnBorrar.setOnClickListener(new View.OnClickListener() {
+      /*  btnBorrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -285,6 +370,55 @@ public class GestionProductoActivity extends AppCompatActivity {
                         Log.e("Error", t.toString());
                     }
                 });
+            }
+        });*/
+
+        btnBorrar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                if (idProductoBuscar.getText().length()==0) {
+                    Toast.makeText(GestionProductoActivity.this,"Ingrese un ID de Producto",Toast.LENGTH_LONG).show();}
+                else{
+                    Runnable r = new Runnable() {
+                        @Override
+                        public void run() {
+                            Integer id = Integer.parseInt(idProductoBuscar.getText().toString());
+
+                            listaProd = proDao.buscarPorIdProd(id);
+
+                            if (listaProd.isEmpty()) {
+                                Toast.makeText(GestionProductoActivity.this, "Producto no encontrado", Toast.LENGTH_LONG).show();
+                            } else {
+                                final Producto p = listaProd.get(0);
+                                
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        descProducto.setText(p.getDescripcion());
+                                        nombreProducto.setText(p.getNombre());
+                                        precioProducto.setText(p.getPrecio().toString());
+                                        comboCategorias.setSelection(comboAdapter.getPosition(p.getCategoria()));
+                                    }
+                                });
+                                proDao.borrarProd(p);
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        descProducto.setText("");
+                                        nombreProducto.setText("");
+                                        precioProducto.setText("");
+                                        comboCategorias.setSelection(0);
+                                    }
+                                });
+                            }
+
+                        }
+                    };
+                    Thread t = new Thread(r);
+                    t.start();
+                }
             }
         });
 

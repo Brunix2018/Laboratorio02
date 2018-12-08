@@ -24,8 +24,8 @@ public interface ProductoDao {
     @Query("SELECT * FROM Producto")
     List<Producto> getAll();
 
-    @Query("SELECT * FROM Categoria WHERE id = :prodId")
-    List<Producto> buscarPorIdCProd(int prodId);
+    @Query("SELECT * FROM Producto WHERE id = :prodId")
+    List<Producto> buscarPorIdProd(int prodId);
 
     @Insert
     void agregarProd(Producto producto);
