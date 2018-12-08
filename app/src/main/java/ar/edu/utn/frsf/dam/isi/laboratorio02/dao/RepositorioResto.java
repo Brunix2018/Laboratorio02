@@ -19,6 +19,7 @@ public class RepositorioResto {
 
     private BaseDatosRom db;
     private CategoriaDao categoriaDao;
+    private ProductoDao productoDao;
 
 
     // constructor privado para poder implementar SINGLETON
@@ -33,6 +34,7 @@ public class RepositorioResto {
                 .fallbackToDestructiveMigration()
                 .build();
         categoriaDao = db.categoriaDao();
+        productoDao = db.productoDao();
 
 
     }
@@ -47,6 +49,14 @@ public class RepositorioResto {
 
     public void setCategoriaDao(CategoriaDao categoriaDao) {
         this.categoriaDao = categoriaDao;
+    }
+
+    public ProductoDao getProductoDao() {
+        return productoDao;
+    }
+
+    public void setProductoDao(ProductoDao productoDao) {
+        this.productoDao = productoDao;
     }
 
 }
