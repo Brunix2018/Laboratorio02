@@ -32,22 +32,19 @@ public class CategoriaActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                final Categoria categoria = new Categoria();
-
                 if (textoCat.getText().toString().length()>0) {
-
-                    categoria.setNombre(textoCat.getText().toString());
 
                     Runnable r = new Runnable() {
                         @Override
                         public void run() {
+                            Categoria categoria = new Categoria();
+                            categoria.setNombre(textoCat.getText().toString());
                             catDao.agregarCat(categoria);
+                            textoCat.setText("");
                         }
                     };
                     Thread t = new Thread(r);
                     t.start();
-                    textoCat.setText("");
-                    Toast.makeText(CategoriaActivity.this,"La Categoria fue Creada",Toast.LENGTH_LONG).show();
 
                 }else{
                     Toast.makeText(CategoriaActivity.this,"Introduzca un Nombre de Categoria",Toast.LENGTH_LONG).show();
